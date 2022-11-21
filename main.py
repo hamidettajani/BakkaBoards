@@ -1,15 +1,17 @@
 import random
-import pandas
+import pandas as pd
 
-user = input("Skriv inn brukenavnet ditt: ")
-exampleScore = random.randint(0,100)
+L_Board = "leaderboard.csv"
 
-with open("leaderboard.csv", "a") as leaderboard:
+with open(L_Board, "a") as leaderboard:
+    user = input("Skriv inn brukenavnet ditt: ")
+    exampleScore = random.randint(0,100)
+
     leaderboard.write(f"{user}, {exampleScore}\n")
     leaderboard.close()
 
 
-with open("leaderboard.csv", "r") as file:
-    data = pandas.read_csv(file)
+with open(L_Board, "r") as file:
+    data = pd.read_csv(file)
     print("\n")
     print(data.sort_values(by="Score"))
