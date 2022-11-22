@@ -13,5 +13,6 @@ with open(L_Board, "a") as leaderboard:
 
 with open(L_Board, "r") as file:
     data = pd.read_csv(file)
-    print("\n")
-    print(data.sort_values(by="Score"))
+    print("\n", data.sort_values(by="Score", ascending = False))
+
+
