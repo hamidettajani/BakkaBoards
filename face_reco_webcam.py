@@ -4,12 +4,10 @@
 import numpy as np
 import face_recognition as fr
 import cv2
-import shutil, os
-import time
+import os
 
 
 video_capture = cv2.VideoCapture(0) # Starter video.
-
 
 
 path = "faces/"
@@ -18,9 +16,7 @@ load_imgs = np.array([], ndmin=1)
 load_imgs1 = np.array(files1)
 combine = np.concatenate((load_imgs, load_imgs1))
 
-if os.path.exists(f"{path}.DS_Store"):
-    os.remove(f"{path}.DS_Store")
-
+if os.path.exists(f"{path}.DS_Store"): os.remove(f"{path}.DS_Store")
 
 kjent_ansikt_encode = [] # Rekkefølge er viktig. Ellers så viser navnet feil på kamera
 kjent_ansikt_navn = []
@@ -31,8 +27,8 @@ for xfile in combine:
     alle_bilder = fr.load_image_file(f"{path}{xfile}")
     alle_ansiktsencode = fr.face_encodings(alle_bilder)[0]
 
-    kjent_ansikt_encode.append(alle_ansiktsencode)
-    kjent_ansikt_navn.append(name)
+    kjent_ansikt_encode.append(alle_ansiktsencode) 
+    kjent_ansikt_navn.append(name)   
 
 
 # Til å få ansiktet fra front
@@ -41,16 +37,15 @@ face_cascade = cv2.CascadeClassifier("archive_ansiktkjennetegn/cascades/data/haa
 
 # Protocol
 active = True
-face_unknown = False
 
 while active: # Neste steg. Kjennetegne på video. Bruk av while True. Framme for framme
     ret, frame = video_capture.read() # ret betyr boolean og returnerer true hvis frame er tilgjengelig. (Lurer på hvorfor den brukes ikke. Bør undersøke på internett) : frame is an image array vector captured based on the default frames per second defined explicitly or implicitly
     small_frame = cv2.resize(frame, (0,0), fx=0.25, fy=0.25) # Endre størrelse på framme
-    #rgb_frame = small_frame[:, :, ::-1] # Fanger RGB på frammen. Printer ut RGB.
+    rgb_frame = small_frame[:, :, ::-1] # Fanger RGB på frammen. Printer ut RGB.
     #print(frame)
 
-    ansikt_locations = fr.face_locations(small_frame) # Finner hvor er ansikt i framme. Kan være flere ansikter.
-    ansikt_encoding = fr.face_encodings(small_frame, ansikt_locations) # tar ramme fra kamera og sjekker fargen. Liksom hvor er ansiktet.
+    ansikt_locations = fr.face_locations(rgb_frame) # Finner hvor er ansikt i framme. Kan være flere ansikter.
+    ansikt_encoding = fr.face_encodings(rgb_frame, ansikt_locations) # tar ramme fra kamera og sjekker fargen. Liksom hvor er ansiktet.
 
     for (top, right, bottom, left), ansikt_encoding in zip(ansikt_locations, ansikt_encoding): # Location lager array for top right bottom og left. Encoding iterates top, right osv.
 
@@ -77,23 +72,17 @@ while active: # Neste steg. Kjennetegne på video. Bruk av while True. Framme fo
             # print(best_match_index)
         else:
             for (x,y,w,h) in faces:
+
                 print("Ansikt ikke gjenkjent. Lager ny identitet...")
                 roi_color = frame[y:y+h, x:x+w]
                 creating = input("Skriv inn navn: ")
 
                 filess = os.listdir(path)
 
-                cv2.imwrite(f"{creating}.png", roi_color)
+                cv2.imwrite(f"faces/{creating}.png", roi_color)
 
-                face_unknown = True
                 active = False
 
-
-
-        # if navn == "Jacky":
-        #     print("STOOPID CRIME FOUND!")
-        #     exit()
-            
 
 
         # Lage rektangel
@@ -114,30 +103,3 @@ while active: # Neste steg. Kjennetegne på video. Bruk av while True. Framme fo
 
 video_capture.release() # Bli ferdig med video fra webcam
 cv2.destroyAllWindows() 
-
-time.sleep(2)    
-
-if face_unknown == True:
-    path = "faces/.."
-    files = os.listdir(path)
-
-# /Users/kungbao/Documents/VSCode/Python/Ansiktsgjenkjenning/face_reco_webcam.py
-
-
-    for file in files:
-        name, type = os.path.splitext(file)
-        type = type[1:] 
-        # print(type == "png", "=", type)
-
-        
-        if os.path.exists(path + "/" + "faces"): # Hvis faces mappe finnes, put png inn 
-
-            if type != "png":
-                continue
-            else:
-                shutil.move(path + "/" + name + "." + type, path + "/" + "faces")
-                    
-
-            
-    else:
-        print("Ferdig! Flyttet til 'faces' mappe.")
