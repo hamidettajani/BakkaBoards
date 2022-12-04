@@ -35,10 +35,8 @@ for xfile in combine:
 face_cascade = cv2.CascadeClassifier("archive_ansiktkjennetegn/cascades/data/haarcascade_frontalface_alt2.xml")
 
 
-# Protocol
-active = True
 
-while active: # Neste steg. Kjennetegne på video. Bruk av while True. Framme for framme
+while True: # Neste steg. Kjennetegne på video. Bruk av while True. Framme for framme
     ret, frame = video_capture.read() # ret betyr boolean og returnerer true hvis frame er tilgjengelig. (Lurer på hvorfor den brukes ikke. Bør undersøke på internett) : frame is an image array vector captured based on the default frames per second defined explicitly or implicitly
     small_frame = cv2.resize(frame, (0,0), fx=0.25, fy=0.25) # Endre størrelse på framme
     rgb_frame = small_frame[:, :, ::-1] # Fanger RGB på frammen. Printer ut RGB.
@@ -70,18 +68,7 @@ while active: # Neste steg. Kjennetegne på video. Bruk av while True. Framme fo
         if match[best_match_index]: # Kjekker for den beste eller mest lignene ansikt
             navn = kjent_ansikt_navn[best_match_index] # Hvis true, viser det "Elon Musk" eller hva du endrer på linje 11.
             # print(best_match_index)
-        else:
-            for (x,y,w,h) in faces:
 
-                print("Ansikt ikke gjenkjent. Lager ny identitet...")
-                roi_color = frame[y:y+h, x:x+w]
-                creating = input("Skriv inn navn: ")
-
-                filess = os.listdir(path)
-
-                cv2.imwrite(f"faces/{creating}.png", roi_color)
-
-                active = False
 
 
 
