@@ -1,0 +1,61 @@
+html {background-color: black; color: white;}
+@font-face {
+    font-family: 'arcadeclassic';
+    src: url('ARCADECLASSIC.TTF');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+  .grid-container {
+    margin: auto;
+    width: 50%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    background-color: black;
+
+
+    justify-content: center;
+}
+.grid-main {
+    padding: 13px;
+    width: 20vw;
+    font-size: 30px;
+    text-align: center;
+} 
+.grid-item {
+    color: white;
+    padding: 13px;
+    margin: auto;
+    font-size: 30px;
+    text-align: center;
+
+}
+#grid-image {
+    padding: 13px;
+    width: 50%;
+    
+}
+
+
+h1 {
+    color: white;
+    text-align: center;
+    font-family: arcadeclassic;
+}
+
+.overskrift {
+    word-spacing: 10px;
+}
+
+.submit {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    margin: auto;
+    width: 50%;
+    padding: 13px;
+}
+
+.input-position {
+    display: grid;
+}
